@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加</title>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<link rel="stylesheet" href="css/main.css?v=1">
+</head>
+<body>
+<form class="main">
+	<div class="main_list">
+		<span>账号：</span>
+		<input type="text" class="main_pt" name="account" placeholder="请输入账号">
+	</div>
+	<div class="main_list">
+		<span>密码：</span>
+		<input type="password" class="main_pt" name="password" placeholder="请输入密码">
+	</div>
+	<div class="main_btn">
+		<input type="submit" value="提交" class="btn">
+	</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	$(".main").submit(function(){
+		if($("input[name=account]").val() == ''){
+			alert("请输入用户名");
+			return false;
+		}
+		if($("input[name=password]").val() == ''){
+			alert("请输入密码");
+			return false;
+		}
+		$.post("/server/user/add.php",$(this).serialize(),function(rs){
+			alert(rs.msg);
+			if(rs.ret == 1){
+				window.location.href = "index.html";
+			}
+		},'json');
+		return false;
+	})
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>修改</title>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<link rel="stylesheet" href="css/main.css?v=1">
+</head>
+<body>
+<form class="main">
+	<div class="main_list">
+		<span>账号：</span>
+		<input type="text" class="main_pt" name="account" placeholder="请输入账号">
+	</div>
+	<div class="main_list">
+		<span>密码：</span>
+		<input type="password" class="main_pt" name="password" placeholder="请输入密码">
+	</div>
+	<div class="main_btn">
+		<input type="hidden" name="id" value="">
+		<input type="submit" value="提交" class="btn">
+	</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	var flag = true;
+	var href = location.href.split("=");//以锚点标识分割当前页的地址
+	var id = href[1];
+	$("input[name=id]").val(id);
+	$.post("/server/user/row.php",{id:id},function(rs){
+		if(rs.ret == 1){
+			$("input[name=account]").val(rs.data.account);
+			flag = false;
+		}
+	},'json');
+
+	$(".main").submit(function(){
+		if(flag){
+			return false;
+		}
+		if($("input[name=account]").val() == ''){
+			alert("请输入用户名");
+			return false;
+		}
+		if($("input[name=password]").val() == ''){
+			alert("请输入密码");
+			return false;
+		}
+		$.post("/server/user/edit.php",$(this).serialize(),function(rs){
+			alert(rs.msg);
+			if(rs.ret == 1){
+				window.location.href = "index.html";
+			}
+		},'json');
+		return false;
+	})
+})
+</script>
+</body>
+</html>

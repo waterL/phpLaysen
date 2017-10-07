@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登录</title>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<link rel="stylesheet" href="css/main.css?v=2">
+</head>
+<body>
+<div class="main">
+	<a href="add.html" class="tj">添加</a>
+	<table class="table">
+		<tr>
+			<th>id</th>
+			<th>用户名</th>
+			<th>操作</th>
+		</tr>
+	</table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$.post("/server/user/lists.php",{},function(rs){
+		if(rs.ret == 1){
+			var str = '';
+			for(var i = 0 ; i < rs.list.length ; i++){
+				str += '<tr>';
+					str += '<td>'+rs.list[i].id+'</td>';
+					str += '<td>'+rs.list[i].account+'</td>';
+					str += '<td>';
+						str += '<a href="edit.html?id='+rs.list[i].id+'">修改</a>';
+						str += '<a href="javascript:;" class="del" data-id="'+rs.list[i].id+'">删除</a>';
+					str += '</td>';
+				str += '</tr>';
+			}
+			$(".table").append(str);
+			del();
+		}
+	},'json');
+
+	function del(){
+		$(".del").click(function(){
+			if(!confirm('确定删除该条记录')){
+				return false;
+			}
+			var id = $(this).attr("data-id");
+			var _this = $(this);
+			$.post("/server/user/delete.php",{id:id},function(rs){
+				if(rs.ret == 1){
+					_this.parents("tr").remove();
+				}
+			},'json');
+		});
+	}
+});
+</script>
+</body>
+</html>
