@@ -4,7 +4,7 @@ class Db{
 	public function connect(){
 		define('host','localhost');
 		define('user','root');
-		define('pwd','NLngiEuvUiNI');
+		define('pwd','root');
 		$this->conn = mysql_connect(host,user,pwd);
 		if(!$this->conn){
 			die(mysql_error());
